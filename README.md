@@ -7,6 +7,8 @@ Project 5 Team Delta
 ```
 brew install gdal
 ```
+For GDAL, you may need to install [Xcode on Mac OSX](https://apps.apple.com/us/app/xcode/id497799835?mt=12)
+
 
 ## Python Depedencies
 
