@@ -77,13 +77,13 @@ def upload_large_file_to_s3(config, bucket_name, local_file, filename_on_s3):
     return link
 
 
-def connect_postgres_db():
+def connect_postgres_db(database_name, database_user, database_user_password, db_host_url, db_port=5432):
     return psycopg2.connect(
-        database="postgres",
-        user="postgres",
-        password="wsdkgWI7xOQQSi005hlK",
-        host="ceqr-database-1.cnck5bkaekt3.us-east-1.rds.amazonaws.com",
-        port='5432'
+        database=database_name,
+        user=database_user,
+        password=database_user_password,
+        host=db_host_url,
+        port=db_port
     )
 
 
