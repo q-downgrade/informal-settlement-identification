@@ -35,7 +35,7 @@ def upload_file_to_s3(config, bucket_name, local_file, filename_on_s3):
         local_file,
         filename_on_s3,
     )
-    link = 'https://autoceqr.s3.amazonaws.com/{}'.format(filename_on_s3)
+    link = 'https://{}.s3.amazonaws.com/{}'.format(bucket_name, filename_on_s3)
     print('    aws url: {}'.format(link))
 
     return link
@@ -71,7 +71,7 @@ def upload_large_file_to_s3(config, bucket_name, local_file, filename_on_s3):
         local_file,
         filename_on_s3,
     )
-    link = 'https://autoceqr.s3.amazonaws.com/{}'.format(filename_on_s3)
+    link = 'https://{}.s3.amazonaws.com/{}'.format(bucket_name, filename_on_s3)
     print('    aws url: {}'.format(link))
 
     return link
