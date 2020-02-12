@@ -41,3 +41,21 @@ point_table_to_feature_class(
         f"{wd}/input/real_estate/sao_paulo",
         "listings.shp",
 )
+
+delete_fields(
+    f"{wd}/input/airbnb/brazil/listings.shp",
+#     [
+#         "name",
+#         "host_id",
+#         "host_name",
+#         "neighbourh",
+#         "neighbou_1",
+#         "room_type",
+#         "minimum_ni",
+#         "number_of_",
+#         "last_revie",
+#         "reviews_pe",
+#         "calculated",
+#         "availabili",
+#     ],
+# )

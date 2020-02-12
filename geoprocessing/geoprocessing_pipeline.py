@@ -87,7 +87,7 @@ for g in data.keys():
 
         intersect(
             f"{wd}/processing/processing.gdb/{g}_geog",
-            f"{wd}/{data['rj']['listings']}",
+            f"{wd}/{data[g]['listings']}",
             f"{wd}/processing/processing.gdb/{g}_geog_int_listings",
         )  # intersect geog and target
 
@@ -95,14 +95,14 @@ for g in data.keys():
             f"{wd}/processing/processing.gdb/{g}_geog_int_listings",
         )
 
-        listings.columns = [x.lower() for x in data.listings]  # force lowercase
-        master_df.columns = [x.lower() for x in master_df.listings]
+        listings.columns = [x.lower() for x in listings.columns]  # force lcase
+        master_df.columns = [x.lower() for x in master_df.columns]
 
         listings_g = listings[[
             census_tract_uid.lower(),
             "price",
         ]].groupby(
-            [census_tract_uid.lower(),],
+            [census_tract_uid.lower()],
             as_index=False,
         ).count()  # create sum favela area for census tract (aka geog)
 
