@@ -1,8 +1,10 @@
 import arcpy
 import pandas as pd
+import uuid
 
 
 arcpy.env.overwriteOutput = True
+arcpy.env.outputMFlag = "Disabled"
 
 
 def calculate_area(in_fc, area_field_name, area_units):
@@ -69,3 +71,40 @@ def intersect(in_fc_1, in_fc_2, output_fc, attributes="ALL"):
 
 def dissolve_on_fields(input_fc, output_fc, dissolve_fields):
     arcpy.Dissolve_management(input_fc, output_fc, dissolve_fields)
+
+
+def point_table_to_feature_class(
+        input_table,
+        input_x_column,
+        input_y_column,
+        spatial_reference_info,
+        output_location,
+        output_layer_name,
+):
+    uid = generate_uuid()
+
+    arcpy.MakeXYEventLayer_management(
+        table=input_table,
+        in_x_field=input_x_column,
+        in_y_field=input_y_column,
+        out_layer="in_memory_layer_{}".format(uid),
+        spatial_reference=spatial_reference_info,
+        in_z_field="",
+    )
+
+    arcpy.FeatureClassToFeatureClass_conversion(
+        in_features="in_memory_layer_{}".format(uid),
+        out_path=output_location,
+        out_name=output_layer_name,
+    )
+
+
+def generate_uuid():
+    return uuid.uuid4().hex
+
+
+def delete_fields(input_table, list_drop_fields):
+    arcpy.DeleteField_management(
+        in_table=input_table,
+        drop_field=';'.join(list_drop_fields),
+    )
