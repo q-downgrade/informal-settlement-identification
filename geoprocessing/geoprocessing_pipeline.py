@@ -40,8 +40,34 @@ for g in data.keys():
             "squaremeters",
         )
 
-        # create pct favela area for census tract (aka geog)
-        # create favela binary flag for census tract (aka geog)
+        df = feature_class_to_dataframe(
+            f"{wd}/processing/processing.gdb/{g}_geog_int_target",
+        )
+
+        census_tract_uid = "CD_GEOCODI"
+
+        dfg = df[[
+            census_tract_uid,
+            f"{i[1]}_orig_area",
+            "new_int_area",
+        ]].groupby(
+            [census_tract_uid, f"{i[1]}_orig_area"],
+            as_index=False,
+        ).sum()  # create sum favela area for census tract (aka geog)
+
+        dfg['favela_present'] = 1  # create favela binary flag for census tract
+        dfg['favela_area_squaremeters'] = dfg['new_int_area']
+
+        dfg[[
+            census_tract_uid,
+            f"{i[1]}_orig_area",
+            'favela_present',
+            'favela_area_squaremeters'
+        ]].to_csv(
+            f"{wd}/processing/{g}_geog_int_target_sum.csv",
+            index=False,
+        )
+
         # create population estimate for census tract (aka geog)
         # create count of real estate listings per census tract (aka geog)
         # create from geog to_csv function to create analytical dataset
