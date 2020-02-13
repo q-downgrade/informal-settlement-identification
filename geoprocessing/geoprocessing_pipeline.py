@@ -89,7 +89,7 @@ for g in data.keys():
             f"{wd}/processing/processing.gdb/{g}_geog",
             f"{wd}/{data[g]['listings']}",
             f"{wd}/processing/processing.gdb/{g}_geog_int_listings",
-        )  # intersect geog and target
+        )  # create count of real estate listings per census tract (aka geog)
 
         listings = feature_class_to_dataframe(
             f"{wd}/processing/processing.gdb/{g}_geog_int_listings",
@@ -157,7 +157,6 @@ for g in data.keys():
             f"{wd}/output/{g}_master.csv",
             index=False,
         )
-        # create count of real estate listings per census tract (aka geog)
 
         # categories from kaggle set
         #       ph - private home
@@ -166,7 +165,4 @@ for g in data.keys():
         #       house
 
         # create population estimate for census tract (aka geog)
-        # create from geog to_csv function to create analytical dataset
         # post dataset to s3
-        # have preliminary analytical dataset for rio for Q by noon
-        # have preliminary analytical dataset for sp for Matteo by 5
