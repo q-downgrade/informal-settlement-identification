@@ -106,7 +106,7 @@ for g in data.keys():
             as_index=False,
         ).count()  # create sum favela area for census tract (aka geog)
 
-        listings_g['count_listings'] = listings_g['price']
+        listings_g['real_estate_count_listings'] = listings_g['price']
 
         listings_g.to_csv(
             f"{wd}/output/{g}_test_listings.csv",
@@ -116,7 +116,7 @@ for g in data.keys():
         master_df = master_df.merge(
             listings_g[[
                 census_tract_uid.lower(),
-                'count_listings',
+                'real_estate_count_listings',
             ]],
             how='left',
             on=census_tract_uid.lower(),
@@ -129,12 +129,30 @@ for g in data.keys():
             f"{wd}/processing/processing.gdb/{g}_geog_near_listings",
         )
 
+        nl = feature_class_to_dataframe(
+            f"{wd}/processing/processing.gdb/{g}_geog_near_listings",
+        )
+
+        nl.columns = [f'real_estate_{x.lower()}' for x in nl.columns]
+
+        master_df = master_df.merge(
+            nl,
+            how='left',
+            left_on='objectid',
+            right_on='real_estate_in_fid'
+        )
+
         master_df[[
             census_tract_uid.lower(),
             'geog_orig_area',
-            'count_listings',
             'favela_present',
             'favela_area_squaremeters',
+            'real_estate_count_listings',
+            'real_estate_objectid',
+            'real_estate_in_fid',
+            'real_estate_near_fid',
+            'real_estate_near_dist',
+            'real_estate_near_angle'
         ]].to_csv(
             f"{wd}/output/{g}_master.csv",
             index=False,
