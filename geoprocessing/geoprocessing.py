@@ -108,3 +108,13 @@ def delete_fields(input_table, list_drop_fields):
         in_table=input_table,
         drop_field=';'.join(list_drop_fields),
     )
+
+
+def near_table(in_features, near_features, out_table):
+    arcpy.GenerateNearTable_analysis(
+        in_features,
+        near_features,
+        out_table,
+        angle='ANGLE',
+        method='GEODESIC',
+    )

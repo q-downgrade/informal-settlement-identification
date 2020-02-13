@@ -122,6 +122,13 @@ for g in data.keys():
             on=census_tract_uid.lower(),
         )
 
+        # distance to nearest real estate locations
+        near_table(
+            f"{wd}/processing/processing.gdb/{g}_geog",
+            f"{wd}/{data[g]['listings']}",
+            f"{wd}/processing/processing.gdb/{g}_geog_near_listings",
+        )
+
         master_df[[
             census_tract_uid.lower(),
             'geog_orig_area',
@@ -133,6 +140,12 @@ for g in data.keys():
             index=False,
         )
         # create count of real estate listings per census tract (aka geog)
+
+        # categories from kaggle set
+        #       ph - private home
+        #       apartment
+        #       store
+        #       house
 
         # create population estimate for census tract (aka geog)
         # create from geog to_csv function to create analytical dataset
