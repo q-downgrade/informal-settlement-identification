@@ -117,4 +117,92 @@ def near_table(in_features, near_features, out_table):
         out_table,
         angle='ANGLE',
         method='GEODESIC',
+        search_radius='10 kilometers'
+    )
+
+
+def split_by_attributes(input_fc, workspace, split_fields):
+    arcpy.SplitByAttributes_analysis(
+        Input_Table=input_fc,
+        Target_Workspace=workspace,
+        Split_Fields=split_fields,
+    )
+
+
+def add_field_calculate(
+        in_fc,
+        new_field_name,
+        new_field_type,
+        expression,
+):
+    arcpy.AddField_management(
+        in_table=in_fc,
+        field_name=new_field_name,
+        field_type=new_field_type,
+    )
+
+    arcpy.CalculateField_management(
+        in_table=in_fc,
+        field=new_field_name,
+        expression=expression,
+        expression_type="PYTHON",
+        code_block="",
+    )
+
+
+def select_features_by_query(
+        input_table,
+        output_table,
+        query,
+):
+    arcpy.Select_analysis(
+        in_features=input_table,
+        out_feature_class=output_table,
+        where_clause=query,
+    )
+
+
+def select_overlapping_data(
+        select_feature,
+        select_from_dataset,
+        output_location,
+        output_layer_name,
+        message=True,
+):
+    uuid = generate_uuid()
+
+    arcpy.MakeFeatureLayer_management(
+        select_from_dataset,
+        'select_from_dataset_{}'.format(uuid),
+    )
+
+    arcpy.SelectLayerByLocation_management(
+        'select_from_dataset_{}'.format(uuid),
+        "INTERSECT",
+        select_feature,
+        search_distance="",
+        selection_type="NEW_SELECTION",
+        invert_spatial_relationship="NOT_INVERT",
+    )
+
+    arcpy.FeatureClassToFeatureClass_conversion(
+        'select_from_dataset_{}'.format(uuid),
+        output_location,
+        output_layer_name
+    )
+
+    arcpy.Delete_management('select_from_dataset_{}'.format(uuid))
+
+    if message:
+        print('    selection complete for {}'.format(select_from_dataset))
+
+
+def study_area_circle(in_fc, out_fc):
+    arcpy.MinimumBoundingGeometry_management(
+        in_features=in_fc,
+        out_feature_class=out_fc,
+        geometry_type="CIRCLE",
+        group_option="ALL",
+        group_field="",
+        mbg_fields_option="NO_MBG_FIELDS",
     )
