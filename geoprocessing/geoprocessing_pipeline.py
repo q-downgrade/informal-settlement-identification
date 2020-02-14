@@ -145,15 +145,15 @@ for g in data.keys():
                     ], inplace=True)
 
                 # distance to nearest real estate locations
-                processing_gdb =
+                p_gdb = 'processing/processing.gdb'
                 near_table(
-                    f"{wd}/processing/processing.gdb/{g}_geog_complete",
+                    f"{wd}/{p_gdb}/{g}_geog_complete",
                     f"{wd}/input/real_estate/{i}/{i}_{c}.shp",
-                    f"{wd}/processing/processing.gdb/{g}_geog_{i}_{c.lower()}_near",
+                    f"{wd}/{p_gdb}/{g}_geog_{i}_{c.lower()}_near",
                 )
 
                 nl = feature_class_to_dataframe(
-                    f"{wd}/processing/processing.gdb/{g}_geog_{i}_{c.lower()}_near",
+                    f"{wd}/{p_gdb}/{g}_geog_{i}_{c.lower()}_near",
                 )
 
                 pt = feature_class_to_dataframe(
@@ -176,52 +176,38 @@ for g in data.keys():
                 nl.drop(
                     columns=[
                         f'{i}_{c.lower()}_objectid',
-                        f'{i}_{c.lower()}_in_fid',
+                        # f'{i}_{c.lower()}_in_fid',
                         'FID',
                         'price',
                     ],
                     inplace=True,
                 )
-                print(len(master_df.index), 'line 184')
+
+                print(len(master_df.index), 'line 185')
+
                 if len(nl.index) > 0:
+                    # nl = nl.merge(
+                    #     pt,
+                    #     how='left',
+                    #     right_on='FID',
+                    #     left_on=f'{i}_{c.lower()}_near_fid',
+                    # )
+                    print('nl', nl.shape, nl.columns)
+                    print(len(master_df.index), 'line 196')
+
                     master_df = master_df.merge(
                         nl,
                         how='left',
                         left_on='objectid',
-                        right_on=f'{i}_{c.lower()}_near_fid',
+                        right_on=f'{i}_{c.lower()}_in_fid',
                     )
-                    print(len(master_df.index), 'line 192')
+
+                    print(len(master_df.index), 'line 205')
 
         # listings.columns = [x.lower() for x in listings.columns]  # force lcas
         master_df.columns = [x.lower() for x in master_df.columns]
 
-        # listings_g.to_csv(
-        #     f"{wd}/output/{g}_test_listings.csv",
-        #     index=False,
-        # )
-
-        # master_df = master_df.merge(
-        #     listings_g[[
-        #         census_tract_uid.lower(),
-        #         'real_estate_count_listings',
-        #     ]],
-        #     how='left',
-        #     on=census_tract_uid.lower(),
-        # )
-
-        # master_df[[
-        #     census_tract_uid.lower(),
-        #     'geog_orig_area',
-        #     'favela_present',
-        #     'favela_area_squaremeters',
-        #     'real_estate_count_listings',
-        #     'real_estate_objectid',
-        #     'real_estate_in_fid',
-        #     'real_estate_near_fid',
-        #     'real_estate_near_dist',
-        #     'real_estate_near_angle'
-        # ]]
-        print(len(master_df.index), 'line 223')
+        print(len(master_df.index), 'line 210')
         master_df.drop(
             columns=[
                 'objectid',
@@ -239,16 +225,13 @@ for g in data.keys():
             inplace=True,
         )
 
+        master_df.fillna(0, inplace=True)
+
+        master_df = master_df[master_df.columns.drop(
+            list(master_df.filter(regex='in_fid'))
+        )]
+
         master_df.to_csv(
             f"{wd}/output/{g}_master.csv",
             index=False,
         )
-
-        # categories from kaggle set
-        #       ph - private home
-        #       apartment
-        #       store
-        #       house
-
-        # create population estimate for census tract (aka geog)
-        # post dataset to s3
