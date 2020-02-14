@@ -13,8 +13,8 @@ data = {
         "sao_paulo": "input/real_estate/sao_paulo/sao_paulo.shp",
         "brazil_csv": "input/real_estate/brazil/data_brazil_concat.csv",
         "brazil": "input/real_estate/brazil/brazil.shp",
-        "airbnb_rio_csv": "input/real_estate/airbnb/airbnb.csv",
-        "airbnb_rio": "input/real_estate/airbnb/airbnb.shp",
+        # "airbnb_rio_csv": "input/real_estate/airbnb/airbnb.csv",
+        # "airbnb_rio": "input/real_estate/airbnb/airbnb.shp",
     },
     "projections": {
         "wgs_84_srid": 4326

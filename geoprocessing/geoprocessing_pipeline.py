@@ -9,7 +9,7 @@ arcpy.env.outputMFlag = "Disabled"
 
 for g in data.keys():
 
-    if (g == "real_estate") | (g == "projections"):  # sp or rj
+    if (g == "real_estate") | (g == "projections") | (g == 'rj'):  # sp or rj
         pass
     else:
         print(f"running for {g}")
@@ -95,10 +95,10 @@ for g in data.keys():
             how='left',
             on=census_tract_uid,
         )
-
+        print(len(master_df.index), 'line 98')
         master_df.columns = [x.lower() for x in master_df.columns]
 
-        for i in ['airbnb', 'sao_paulo', 'brazil']:
+        for i in ['sao_paulo', 'brazil']:  # 'airbnb',
             print(i)
             df = feature_class_to_dataframe(
                 f"{wd}/input/real_estate/{i}/{i}.shp"
@@ -106,7 +106,7 @@ for g in data.keys():
 
             for c in list(df['property_t'].unique()):
                 c = c.lower()
-                print(c)
+                print(f'    {c}')
                 intersect(
                     f"{wd}/processing/processing.gdb/{g}_geog_complete",
                     f"{wd}/input/real_estate/{i}/{i}_{c}.shp",
@@ -131,20 +131,21 @@ for g in data.keys():
                     re_g[f'{i}_{c.lower()}_count_listings'] = re_g[
                         f'{i}_{c.lower()}_price'
                     ]
-
+                    print(len(master_df.index), 'line 134')
                     master_df = master_df.merge(
                         re_g,
                         left_on=census_tract_uid.lower(),
                         right_on=f'{i}_{c.lower()}_{census_tract_uid.lower()}',
                         how='left',
                     )
-
+                    print(len(master_df.index), 'line 141')
                     master_df.drop(columns=[
                         f'{i}_{c.lower()}_{census_tract_uid.lower()}',
                         f'{i}_{c.lower()}_price',
                     ], inplace=True)
 
                 # distance to nearest real estate locations
+                processing_gdb =
                 near_table(
                     f"{wd}/processing/processing.gdb/{g}_geog_complete",
                     f"{wd}/input/real_estate/{i}/{i}_{c}.shp",
@@ -167,24 +168,29 @@ for g in data.keys():
                     pt[['FID', 'price']],
                     left_on=f'{i}_{c.lower()}_near_fid',
                     right_on='FID',
+                    how='left'
                 )
 
-                nl = nl.drop(
+                nl[f'{i}_{c.lower()}_near_price'] = nl['price']
+
+                nl.drop(
                     columns=[
                         f'{i}_{c.lower()}_objectid',
                         f'{i}_{c.lower()}_in_fid',
                         'FID',
+                        'price',
                     ],
                     inplace=True,
                 )
-
+                print(len(master_df.index), 'line 184')
                 if len(nl.index) > 0:
                     master_df = master_df.merge(
                         nl,
                         how='left',
                         left_on='objectid',
-                        right_on=f'{i}_{c.lower()}_in_fid',
+                        right_on=f'{i}_{c.lower()}_near_fid',
                     )
+                    print(len(master_df.index), 'line 192')
 
         # listings.columns = [x.lower() for x in listings.columns]  # force lcas
         master_df.columns = [x.lower() for x in master_df.columns]
@@ -215,7 +221,7 @@ for g in data.keys():
         #     'real_estate_near_dist',
         #     'real_estate_near_angle'
         # ]]
-
+        print(len(master_df.index), 'line 223')
         master_df.drop(
             columns=[
                 'objectid',

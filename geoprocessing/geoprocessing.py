@@ -1,6 +1,7 @@
 import arcpy
 import pandas as pd
 import uuid
+import json
 
 
 arcpy.env.overwriteOutput = True
@@ -117,7 +118,7 @@ def near_table(in_features, near_features, out_table):
         out_table,
         angle='ANGLE',
         method='GEODESIC',
-        search_radius='10 kilometers'
+        search_radius='10000 kilometers'
     )
 
 
@@ -206,3 +207,9 @@ def study_area_circle(in_fc, out_fc):
         group_field="",
         mbg_fields_option="NO_MBG_FIELDS",
     )
+
+
+def read_json(json_file):
+    with open(json_file) as f:
+        return json.load(f)
+
