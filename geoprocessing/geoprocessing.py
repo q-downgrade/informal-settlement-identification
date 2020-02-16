@@ -170,15 +170,15 @@ def select_overlapping_data(
         output_layer_name,
         message=True,
 ):
-    uuid = generate_uuid()
+    uid = generate_uuid()
 
     arcpy.MakeFeatureLayer_management(
         select_from_dataset,
-        'select_from_dataset_{}'.format(uuid),
+        'select_from_dataset_{}'.format(uid),
     )
 
     arcpy.SelectLayerByLocation_management(
-        'select_from_dataset_{}'.format(uuid),
+        'select_from_dataset_{}'.format(uid),
         "INTERSECT",
         select_feature,
         search_distance="",
@@ -187,12 +187,12 @@ def select_overlapping_data(
     )
 
     arcpy.FeatureClassToFeatureClass_conversion(
-        'select_from_dataset_{}'.format(uuid),
+        'select_from_dataset_{}'.format(uid),
         output_location,
         output_layer_name
     )
 
-    arcpy.Delete_management('select_from_dataset_{}'.format(uuid))
+    arcpy.Delete_management('select_from_dataset_{}'.format(uid))
 
     if message:
         print('    selection complete for {}'.format(select_from_dataset))
@@ -213,3 +213,34 @@ def read_json(json_file):
     with open(json_file) as f:
         return json.load(f)
 
+
+def clip_raster(
+        input_raster,
+        input_clip_geography,
+        output_raster,
+):
+    arcpy.Clip_management(
+        in_raster=input_raster,
+        out_raster= output_raster,
+        in_template_dataset=input_clip_geography,
+        clipping_geometry="NONE",
+        maintain_clipping_extent="NO_MAINTAIN_EXTENT",
+    )
+
+
+def raster_to_integer(input_raster, output_raster):
+    arcpy.gp.RasterCalculator_sa(
+        f'Int("{input_raster}")',
+        output_raster,
+    )
+
+
+def raster_to_polygon(input_raster, output_raster):
+    arcpy.RasterToPolygon_conversion(
+        in_raster=input_raster,
+        out_polygon_features=output_raster,
+        simplify="NO_SIMPLIFY",
+        raster_field="Value",
+        create_multipart_features="SINGLE_OUTER_PART",
+        max_vertices_per_feature="",
+    )

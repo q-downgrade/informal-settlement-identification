@@ -9,9 +9,7 @@ arcpy.env.outputMFlag = "Disabled"
 
 for g in data.keys():
 
-    if (g == "real_estate") | (g == "projections") | (g == 'rj'):  # sp or rj
-        pass
-    else:
+    if (g == 'sp') | (g == 'rj'):
         print(f"running for {g}")
         geog = f"{wd}/{data[g]['census_tract']}"
         target = f"{wd}/{data[g]['favela']}"
@@ -45,6 +43,70 @@ for g in data.keys():
         geog_complete = feature_class_to_dataframe(
             f"{wd}/processing/processing.gdb/{g}_geog_complete"
         )
+
+        # population data
+        clip_raster(
+            f"{wd}/{data['population']}",
+            f"{wd}/processing/processing.gdb/{g}_target_study_area",
+            f"{wd}/processing/processing.gdb/{g}_pop",
+        )
+
+        raster_to_integer(
+            f"{wd}/processing/processing.gdb/{g}_pop",
+            f"{wd}/processing/processing.gdb/{g}_pop_int",
+        )
+
+        raster_to_polygon(
+            f"{wd}/processing/processing.gdb/{g}_pop_int",
+            f"{wd}/processing/processing.gdb/{g}_pop_int_poly",
+        )
+
+        calculate_area(
+            f"{wd}/processing/processing.gdb/{g}_pop_int_poly",
+            "orig_pop_grid_area",
+            "squaremeters",
+        )
+
+        intersect(
+            f"{wd}/processing/processing.gdb/{g}_pop_int_poly",
+            f"{wd}/processing/processing.gdb/{g}_geog_complete",
+            f"{wd}/processing/processing.gdb/{g}_geog_int_pop_poly",
+        )  # intersect geog and pop grid
+
+        calculate_area(
+            f"{wd}/processing/processing.gdb/{g}_geog_int_pop_poly",
+            f"new_int_area",
+            "squaremeters",
+        )
+
+        add_field_calculate(
+            f"{wd}/processing/processing.gdb/{g}_geog_int_pop_poly",
+            'pct_orig_area',
+            'FLOAT',
+            "!new_int_area! / !orig_pop_grid_area!",
+        )
+
+        add_field_calculate(
+            f"{wd}/processing/processing.gdb/{g}_geog_int_pop_poly",
+            'population_estimate',
+            'FLOAT',
+            "!pct_orig_area! * !gridcode!",
+        )
+
+        pop = feature_class_to_dataframe(
+            f"{wd}/processing/processing.gdb/{g}_geog_int_pop_poly",
+        )
+
+        pop_g = pop[[
+            "CD_GEOCODI",
+            'population_estimate',
+        ]].groupby(
+            ["CD_GEOCODI"],
+            as_index=False,
+        ).sum()
+
+        pop_g.columns = [x.lower() for x in pop_g.columns]
+        # end population data
 
         intersect(
             f"{wd}/processing/processing.gdb/{g}_geog_complete",
@@ -230,6 +292,13 @@ for g in data.keys():
         master_df = master_df[master_df.columns.drop(
             list(master_df.filter(regex='in_fid'))
         )]
+
+        print(pop_g.head())
+        master_df = master_df.merge(
+            pop_g,
+            how='left',
+            on=census_tract_uid.lower(),
+        )
 
         master_df.to_csv(
             f"{wd}/output/{g}_master.csv",

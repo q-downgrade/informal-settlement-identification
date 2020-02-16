@@ -18,5 +18,6 @@ data = {
     },
     "projections": {
         "wgs_84_srid": 4326
-    }
+    },
+    "population": "input\population\gpw_v4_population_count_adjusted_to_2015_unwpp_country_totals_rev11_2020_30_sec_brazil.tif"
 }
