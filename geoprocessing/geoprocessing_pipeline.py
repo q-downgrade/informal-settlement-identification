@@ -238,7 +238,6 @@ for g in data.keys():
                 nl.drop(
                     columns=[
                         f'{i}_{c.lower()}_objectid',
-                        # f'{i}_{c.lower()}_in_fid',
                         'FID',
                         'price',
                     ],
@@ -265,6 +264,63 @@ for g in data.keys():
                     )
 
                     print(len(master_df.index), 'line 205')
+
+                if g == 'sp':
+                    # kernel density of listing locations
+                    # kernel density of listing locations
+                    # kernel density of listing locations
+                    project_data(
+                        f"{wd}/processing/processing.gdb/{g}_geog_int_{i}_{c}",
+                        f"{wd}/processing/processing.gdb/{g}_geog_int_{i}_{c}_proj",
+                        data["projections"]["WGS_1984_UTM_Zone_23S_EPSG"],
+                    )
+
+                    ex = 'proj_kd_c0500_r5000'
+                    kernel_density(
+                        f"{wd}/processing/processing.gdb/{g}_geog_int_{i}_{c}_proj",
+                        f"{wd}/processing/processing.gdb/{g}_geog_int_{i}_{c}_{ex}",
+                        500,
+                        5000,
+                        population_field="NONE",
+                        area_units="SQUARE_KILOMETERS",
+                    )
+
+                    ep = ex + '_point'
+                    raster_to_point(
+                        f"{wd}/processing/processing.gdb/{g}_geog_int_{i}_{c}_{ex}",
+                        f"{wd}/processing/processing.gdb/{g}_geog_int_{i}_{c}_{ep}",
+                    )
+
+                    ec = ep + '_int_census_tracts'
+                    intersect(
+                        f"{wd}/processing/processing.gdb/{g}_geog_complete",
+                        f"{wd}/processing/processing.gdb/{g}_geog_int_{i}_{c}_{ep}",
+                        f"{wd}/processing/processing.gdb/{g}_geog_int_{i}_{c}_{ec}",
+                    )
+
+                    kd = feature_class_to_dataframe(
+                        f"{wd}/processing/processing.gdb/{g}_geog_int_{i}_{c}_{ec}",
+                    )[["CD_GEOCODI", 'grid_code']]
+
+                    kd.columns = [x.lower() for x in kd.columns]
+
+                    kd[f'{g}_{i}_{c}_kernel_density'] = kd['grid_code'].round(6)
+
+                    kd_g = kd[
+                        ["cd_geocodi", f'{g}_{i}_{c}_kernel_density']].groupby(
+                        "cd_geocodi",
+                        as_index=False,
+                    ).mean()
+
+                    master_df = master_df.merge(
+                        kd_g,
+                        how='left',
+                        left_on="cd_geocodi",
+                        right_on="cd_geocodi",
+                    )
+                    # kernel density of listing locations
+                    # kernel density of listing locations
+                    # kernel density of listing locations
 
         # listings.columns = [x.lower() for x in listings.columns]  # force lcas
         master_df.columns = [x.lower() for x in master_df.columns]

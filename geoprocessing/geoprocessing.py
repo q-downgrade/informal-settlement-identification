@@ -221,7 +221,7 @@ def clip_raster(
 ):
     arcpy.Clip_management(
         in_raster=input_raster,
-        out_raster= output_raster,
+        out_raster=output_raster,
         in_template_dataset=input_clip_geography,
         clipping_geometry="NONE",
         maintain_clipping_extent="NO_MAINTAIN_EXTENT",
@@ -235,12 +235,50 @@ def raster_to_integer(input_raster, output_raster):
     )
 
 
-def raster_to_polygon(input_raster, output_raster):
+def raster_to_polygon(input_raster, output_polygon_fc):
     arcpy.RasterToPolygon_conversion(
         in_raster=input_raster,
-        out_polygon_features=output_raster,
+        out_polygon_features=output_polygon_fc,
         simplify="NO_SIMPLIFY",
         raster_field="Value",
         create_multipart_features="SINGLE_OUTER_PART",
         max_vertices_per_feature="",
+    )
+
+
+def raster_to_point(input_raster, output_point_fc):
+    arcpy.RasterToPoint_conversion(
+        in_raster=input_raster,
+        out_point_features=output_point_fc,
+        raster_field="Value",
+    )
+
+
+def project_data(
+        input_fc,
+        output_fc,
+        out_coordinate_system,
+):
+    arcpy.Project_management(
+        in_dataset=input_fc,
+        out_dataset=output_fc,
+        out_coor_system=out_coordinate_system,
+    )
+
+
+def kernel_density(
+        input_fc,
+        output_raster,
+        cell_size,
+        search_radius,
+        population_field="NONE",
+        area_units="SQUARE_KILOMETERS",
+):
+    arcpy.gp.KernelDensity_sa(
+        input_fc,
+        population_field,
+        output_raster,
+        cell_size,
+        search_radius,
+        area_units,
     )

@@ -17,6 +17,7 @@ data = {
         # "airbnb_rio": "input/real_estate/airbnb/airbnb.shp",
     },
     "projections": {
+        "WGS_1984_UTM_Zone_23S_EPSG": 32723,
         "wgs_84_srid": 4326
     },
     "population": "input\population\gpw_v4_population_count_adjusted_to_2015_unwpp_country_totals_rev11_2020_30_sec_brazil.tif"
