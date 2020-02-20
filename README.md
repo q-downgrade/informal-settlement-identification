@@ -57,9 +57,27 @@ Once all the datasets were ready to be used we fed them through a geoprocessing 
 
 For the purpose of this study, we decided to do a complete case analysis keeping only complete real estate data. 
 
+## Requirements
+
+We leveraged a standard set of Data Science python libraries as well as Esri's `arcpy` Python package from ArcGIS install (Windows) and `cartopy` and `ipyleaflet` for mapping and visualization. 
+
+See our [requirements.txt](https://git.generalassemb.ly/delta/delta/blob/master/requirements.txt)
 
 ---
-## Executive Summary
+
+# Executive Summary
+
+This project is being developed for New Light Technologies  a small, award-winning organization based in Washington, D.C. that provides solutions to government, commercial, and non-profit clients. The main objective of this project is to Improve Slum Area Identification through Real-Estate Data. We found during research that around 25% of the world’s urban population lives in informal settlements, areas that are cut off from basic services and city infrastructure. Mapping these locations can dramatically help aid and non-government organizations better serve those in need. Our team intent to develope a machine learning-based tool that can automatically classify informal settlements using freely available population density data, real estate listing, satellite and aerial imagery. Our first strategy is to finalize a good data source forbuild a web scraper to house and apartment adverts for a selected city in Africa/Latin America/Middle East.
+
+
+After extracting the data next decision we had to make was what column or columns needs to be our X. We found apartment_near_dist, ph_near_dist, store_near_dist, house_near_dist, ph_near_angle, apartment_near_angle seemed to be having more correlation in identifying the slum area. 
+ 
+
+EDA helped us set up a preprocessing plan for our model. For preprocessing, we had created a fucntion that used regex, lemmatizatizer which removed punctuation and stopwords. For modeling, I used  TFIDF and Count vetorizers. They brought context of word choices into play, which will give us a better understanding of the group of words used in a reddit blog post about the sports we are analyzing.
+ 
+Machines had no problem understanding the real estat data, after the initial EDA.
+
+Source : [https://www.habitatireland.ie/2018/01/1-billion-people-live-slums/](https://www.habitatireland.ie/2018/01/1-billion-people-live-slums/)
 
 
 ---
