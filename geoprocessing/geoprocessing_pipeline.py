@@ -357,6 +357,6 @@ for g in data.keys():
         )
 
         master_df.to_csv(
-            f"{wd}/output/{g}_master.csv",
+            f"{wd}/output/{g}_geoprocessing.csv",
             index=False,
         )
