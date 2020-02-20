@@ -79,6 +79,10 @@ Machines had no problem understanding the real estat data, after the initial EDA
 
 Source : [https://www.habitatireland.ie/2018/01/1-billion-people-live-slums/](https://www.habitatireland.ie/2018/01/1-billion-people-live-slums/)
 
+### Data Dictionary
+
+For the variables we created, we have contstructed a [data dictionary](https://git.generalassemb.ly/delta/delta/blob/master/data_dictionary/data_dictionary.md). 
+
 
 ---
 ## Conclusions and Recommendations
