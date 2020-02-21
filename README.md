@@ -30,6 +30,8 @@ Is it possible to identify informal settlements using real estate data and popul
 
 * [Modeling Notebook Link - GitHub View](https://git.generalassemb.ly/delta/delta/blob/master/modeling/modeling-notebook.ipynb)  
 
+* [Results Map Notebook Link - GitHub View](https://git.generalassemb.ly/delta/delta/blob/master/geoprocessing/Results_Map.ipynb)
+
   
 ---
 
@@ -93,8 +95,13 @@ Source : [https://www.habitatireland.ie/2018/01/1-billion-people-live-slums/](ht
 
 Using real estate listings and population mapped to census tracts we were able to find a few models that predicted the presense or absence of informal settlements in São Paulo with relatively high accuracy. We found that the distance from real estate listings were the biggest indicators of where a favela is present in the city. The price and number of those listings matter much less, however. This method could potentially be expanded to other cities, but would rely on finding the required data. Different cities would likely require different data, however. In Alexandria, Egypt, for example, informal settlements are more likely to [encroach on agricultural land](https://www.sciencedirect.com/science/article/pii/S111001681730279X). All we can say for sure is that the models we used work in São Paulo, and potentially other cities in the region.
 
+<<<<<<< HEAD
 
 
 ## Recommendations and Limitations
 
 As noted in the conclusion, we recommend using different models for different regions. While this model works well for the city we tested in on, it may not work well in less urban environments where informal settlements may be constructed. This method isn't perfect, and will likely work best when used in conjunction with other methods of detecting informal settlements using satellite data. A combination of the two would likely yield better results than these models alone. One limitation is that very small favelas will mark an entire census tract as having an informal settlement within it. Future iterations may want to limit the number of small informal settlements included in the model. Future versions may also want to avoid using census tracts as a geographical unit as they tend to have unusual shapes. Other methods should be considered for geographical mapping.
+=======
+---
+## Conclusions and Recommendations
+>>>>>>> 940ee9bece0e55f85bdab51adaac218f612f01be
