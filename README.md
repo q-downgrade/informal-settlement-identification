@@ -31,6 +31,8 @@ Is it possible to identify informal settlements using real estate data and popul
 
 * [Modeling Notebook Link - GitHub View](https://git.generalassemb.ly/delta/delta/blob/master/modeling/modeling-notebook.ipynb)
 
+* [Results Map Notebook Link - GitHub View](https://git.generalassemb.ly/delta/delta/blob/master/geoprocessing/Results_Map.ipynb)
+
   
 ## Data Collection
 To collect the data, we searched through global real estate listing websites, but quickly found a lack of consistency in the number of listings in different cities or countries. It became clear that different nations had didfferent ways of listing their properties online, if they even posted them online. To circumvent this problem we decided to perform a case study on Brazil where there was real estate data readily available through Kaggle.
