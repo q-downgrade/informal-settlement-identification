@@ -1,22 +1,21 @@
 # ![](https://ga-dash.s3.amazonaws.com/production/assets/logo-9f88ae6c9c3871690e33280fcf557f33.png) Identifying Informal Settlements Using Real-Estate Data
-
+By Matteo Cangiano, Q Leedham, and Daniel Sheehan  
+  
+  
 ## Table of Contents
   - [Problem Statement](#Problem-Statement)
+  - [Notebook Links](#Notebook-Links-Table-of-Contents)
   - [Data Collection](#Data-Collection)
-  - [Executive Summary](#)
-----
-
-- [ ] Problem Statement
-- [ ] A succinct formulation of the question your analysis seeks to answer.
-- [ ] A table of contents, which should indicate which notebook or scipts a stakeholder should start with and a link to an exectuvie summary. 
-- [ ] A paragraph description of the data you used, plus your data aquisition, ingestion, and cleaning steps. 
+  - [Executive Summary](#Executive-Summary)
+  - [Conclusions](#Conclusions)
+  - [Recommendations and Limitations](#Recommendations-and-Limitations)
 
 ---
 ## Problem Statement   
 
-Mapping of informal settlements with satellite imagery is a long-standing practice, but such methods could be enhanced through web-scraped real-estate data. This project would build a web scraper to house and apartment adverts for a selected city in Africa/Latin America/Middle East. The scraper should download all adverts in the city during a recent period (ideally 3 years or more); and map all the adverts. The project should test the feasibility of estimating informal tenure from this information. Using gridded population estimates (e.g. from Facebook), the team would calculate the ratio of real estate adverts with population density. This ratio could serve as an input to machine learning models aimed at mapping informal settlements.
+Mapping of informal settlements with satellite imagery is a long-standing practice, but such methods could be enhanced through web-scraped real-estate data. This project would build a web scraper to house and apartment adverts for a selected city in Africa/Latin America/Middle East. The scraper should download all adverts in the city during a recent period (ideally 3 years or more); and map all the adverts. The project should test the feasibility of estimating informal tenure from this information. Using gridded population estimates (e.g. from Facebook), the team would calculate the ratio of real estate adverts with population density. This ratio could serve as an input to machine learning models aimed at mapping informal settlements. The team will be using the metric of accuracy for model evaluation. 
 
-### Succent Question Formulation
+### Succinct Question Formulation
 
 Is it possible to identify informal settlements using real estate data and population estimates rather than relying on satelitte imagery?
 
@@ -29,13 +28,15 @@ Is it possible to identify informal settlements using real estate data and popul
 
 * [Geoprocessing Notebook Link - GitHub View](https://git.generalassemb.ly/delta/delta/blob/master/geoprocessing/Geoprocessing.ipynb)
 
-* [Modeling Notebook Link - GitHub View](https://git.generalassemb.ly/delta/delta/blob/master/modeling/modeling-notebook.ipynb)
+* [Modeling Notebook Link - GitHub View](https://git.generalassemb.ly/delta/delta/blob/master/modeling/modeling-notebook.ipynb)  
 
   
+---
+
 ## Data Collection
 To collect the data, we searched through global real estate listing websites, but quickly found a lack of consistency in the number of listings in different cities or countries. It became clear that different nations had didfferent ways of listing their properties online, if they even posted them online. To circumvent this problem we decided to perform a case study on Brazil where there was real estate data readily available through Kaggle.
 
-Preliminary EDA showed that the data was consistent and no clear outliers were present. However, due to the nature of the project we required price, and geo spatial data to be avalable and left out any observations that contained null values in either of these columns making this a complete case analysis. 
+Preliminary EDA showed that the Sao Paulo dataset contained both sale and rent prices. For the purposes of this project the team decided to only include listings that had a rent price as well as geographical location. Making this a Complete Case Analysis will ensure that we have the best possible model we can create, in addition the removal of listings left the team with more than enough data to feed the models.
 
 For population data we leveraged the Gridded Population of the World (GPW) collection fourth version (GPWv4). Read more on GPW data below:
 
@@ -57,6 +58,12 @@ Once all the datasets were ready to be used we fed them through a geoprocessing 
 
 For the purpose of this study, we decided to do a complete case analysis keeping only complete real estate data. 
 
+### Data Dictionary
+
+For the variables we created, we have contstructed a [data dictionary](https://git.generalassemb.ly/delta/delta/blob/master/data_dictionary/data_dictionary.md). 
+
+---
+
 ## Requirements
 
 We leveraged a standard set of Data Science python libraries as well as Esri's `arcpy` Python package from ArcGIS install (Windows) and `cartopy` and `ipyleaflet` for mapping and visualization. 
@@ -65,24 +72,29 @@ See our [requirements.txt](https://git.generalassemb.ly/delta/delta/blob/master/
 
 ---
 
-# Executive Summary
+## Executive Summary
 
-This project is being developed for New Light Technologies  a small, award-winning organization based in Washington, D.C. that provides solutions to government, commercial, and non-profit clients. The main objective of this project is to Improve Slum Area Identification through Real-Estate Data. We found during research that around 25% of the world’s urban population lives in informal settlements, areas that are cut off from basic services and city infrastructure. Mapping these locations can dramatically help aid and non-government organizations better serve those in need. Our team intent to develope a machine learning-based tool that can automatically classify informal settlements using freely available population density data, real estate listing, satellite and aerial imagery. Our first strategy is to finalize a good data source forbuild a web scraper to house and apartment adverts for a selected city in Africa/Latin America/Middle East.
+This project is being developed for New Light Technologies  a small, award-winning organization based in Washington, D.C. that provides solutions to government, commercial, and non-profit clients. The main objective of this project is to Improve Slum Area Identification through Real-Estate Data. We found during research that around 25% of the world’s urban population lives in informal settlements, areas that are cut off from basic services and city infrastructure. Mapping these locations can dramatically help aid and non-government organizations better serve those in need. Our team develops a machine learning-based tool that can automatically classify informal settlements using open sourced population density, and real estate data.
 
+The problem statement asked to create web scrapers to scrape real estate listings for a given city and create interaction terms to see the relationship between population estimates and real estate data when predicting an informal settlement. Due to the limited time we decided to forgo the web scrapers as different cities and countries would have different practices when it came to posting listings online such as the use of different websites. 
 
-After extracting the data next decision we had to make was what column or columns needs to be our X. We found apartment_near_dist, ph_near_dist, store_near_dist, house_near_dist, ph_near_angle, apartment_near_angle seemed to be having more correlation in identifying the slum area. 
- 
+Instead we found two datasets on real estate listings for Brazil on Kaggle and while this was convenient, gathering geospatial data proved to be more complicated. With the use of the IBGE and the state of São Paulo, who partners with companies such as Dados Aberto to provide data on its region, we were able to gather what we needed in the form of census tracts, population estimates and favela locations. 
 
-EDA helped us set up a preprocessing plan for our model. For preprocessing, we had created a fucntion that used regex, lemmatizatizer which removed punctuation and stopwords. For modeling, I used  TFIDF and Count vetorizers. They brought context of word choices into play, which will give us a better understanding of the group of words used in a reddit blog post about the sports we are analyzing.
- 
-Machines had no problem understanding the real estat data, after the initial EDA.
+Preliminary EDA showed that the Sao Paulo dataset contained both sale and rent prices. For the purposes of this project the team decided to only include listings that had a rent price as well as geographical location. Making this a Complete Case Analysis will ensure that we have the best possible model we can create, in addition the removal of listings left the team with more than enough data to feed the models. However, it wasn’t until the listings were plotted around a known favela (Paraisópolis) that the team discovered the relationship between listings in the area. It was at this point the importance of geospatial data became clear.
+
+Once all the datasets were ready to be used we fed them through a geoprocessing pipeline that would be able to assign each listing to a shapefile/sub district allowing us to see the nearest listing to a certain shapefile and its rent price. These two features proved to be the most telling when trying to identify whether a subdistrict contained an informal settlement or not. However, there should be no decision-making based on our model, even though it performs with an ROC score of ~94%. The output of our model is a mere suggestion of which areas are worth investigating further for the presence of informal settlements. 
+
 
 Source : [https://www.habitatireland.ie/2018/01/1-billion-people-live-slums/](https://www.habitatireland.ie/2018/01/1-billion-people-live-slums/)
 
-### Data Dictionary
-
-For the variables we created, we have contstructed a [data dictionary](https://git.generalassemb.ly/delta/delta/blob/master/data_dictionary/data_dictionary.md). 
-
-
 ---
-## Conclusions and Recommendations
+
+## Conclusions
+
+Using real estate listings and population mapped to census tracts we were able to find a few models that predicted the presense or absence of informal settlements in São Paulo with relatively high accuracy. We found that the distance from real estate listings were the biggest indicators of where a favela is present in the city. The price and number of those listings matter much less, however. This method could potentially be expanded to other cities, but would rely on finding the required data. Different cities would likely require different data, however. In Alexandria, Egypt, for example, informal settlements are more likely to [encroach on agricultural land](https://www.sciencedirect.com/science/article/pii/S111001681730279X). All we can say for sure is that the models we used work in São Paulo, and potentially other cities in the region.
+
+
+
+## Recommendations and Limitations
+
+As noted in the conclusion, we recommend using different models for different regions. While this model works well for the city we tested in on, it may not work well in less urban environments where informal settlements may be constructed. This method isn't perfect, and will likely work best when used in conjunction with other methods of detecting informal settlements using satellite data. A combination of the two would likely yield better results than these models alone. One limitation is that very small favelas will mark an entire census tract as having an informal settlement within it. Future iterations may want to limit the number of small informal settlements included in the model. Future versions may also want to avoid using census tracts as a geographical unit as they tend to have unusual shapes. Other methods should be considered for geographical mapping.
