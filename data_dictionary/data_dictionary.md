@@ -9,7 +9,7 @@ nm_meso| |
 id1| |  
 geog_orig_area| *float* | Area of geographical  shapefile.  
 favela_present|*boolean*| 1 = Favela Present, 0 = Favela Not Present|  
-favela_area_squaremeters| *float*| Area of Favela (m<sup>2</sup>2)  
+favela_area_squaremeters| *float*| Area of Favela (m<sup>2</sup>)  
 sao_paulo_apartment_count_listings| *integer* | Number of listings within shapefile.  
 sao_paulo_apartment_near_dist| *float* | Distance to the nearest listing outside of shapefile.
 sao_paulo_apartment_near_angle| *float* | Angle to nearest listing outside shapefile. 
