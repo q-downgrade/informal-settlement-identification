@@ -30,6 +30,8 @@ Is it possible to identify informal settlements using real estate data and popul
 
 * [Modeling Notebook Link - GitHub View](https://git.generalassemb.ly/delta/delta/blob/master/modeling/modeling-notebook.ipynb)  
 
+* [Results Notebook Link - GitHub View](https://git.generalassemb.ly/delta/delta/blob/master/geoprocessing/Results_Map.ipynb)
+
   
 ---
 
