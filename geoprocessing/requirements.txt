@@ -17,7 +17,7 @@ kiwisolver==1.1.0
 lunardate==0.2.0
 matplotlib==3.0.3
 nbformat==4.4.0
-numpy==1.16.2
+numpy==1.22.0
 pandas==0.24.2
 plotly==3.9.0
 protobuf==3.11.3
